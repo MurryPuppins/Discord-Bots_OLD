@@ -7,6 +7,7 @@ from creds import token
 bot = commands.Bot(command_prefix='<', case_insensitive=True)
 client = discord.Client()
 bot.remove_command('help')
+filepath = '/memes/'
 
 # Bot start-up handler
 @bot.event
@@ -68,7 +69,12 @@ async def help(ctx):
 # Command to check vibe
 @bot.command()
 async def vibe(ctx):
-    await ctx.send(random.choice(lines))
+    vabe = random.choice(lines)
+    if vabe[0] == ">":
+        await ctx.send(file=discord.File(filepath + vabe[1:]))
+    else:
+        await ctx.send(vabe)
+    #await ctx.send(random.choice(lines))
 
 # Command to test functionality/status of bot
 @bot.command()
