@@ -3,18 +3,71 @@ import asyncio
 from discord.ext import commands
 import random
 from mcstatus import MinecraftServer
+import json
 
-bot = commands.Bot(command_prefix='<', case_insensitive=True)
+async def getPrefix(client, message):
+    with open('prefixes.json', 'r') as f:
+        prefixes = json.load(f)
 
-client = discord.Client()
-bot.remove_command('help')
+    return prefixes[str(message.guild.id)]
+
+bot = commands.Bot(command_prefix=getPrefix)
+"bot = commands.Bot(command_prefix='<', case_insensitive=True)"
+
+#client = discord.Client()
+bot.remove_command("help")
 rankname = 'Member'
 smp = MinecraftServer("mc.clutchgaming.xyz", 25583)
 modded = MinecraftServer("mod.clutchgaming.xyz", 25569)
 hypixel = MinecraftServer("mc.hypixel.net", 25565)
 
+
+
+# When bot joins guild, assign default prefix
+@bot.event
+async def on_guild_join(guild):
+    with open('prefixes.json', 'r') as f:
+        prefixes = json.load(f)
+
+    prefixes[str(guild.id)] = '>'
+
+    with open('prefixes.json', 'w') as f:
+        json.dump(prefixes, f, indent=4)
+
+@bot.event
+async def on_guild_remove(guild):
+    with open('prefixes.json', 'r') as f:
+        prefixes = json.load(f)
+
+    prefixes.pop(str(guild.id))
+
+    with open('prefixes.json', 'w') as f:
+        json.dump(prefixes, f, indent=4)
+
+@bot.command()
+async def prefix(ctx, prefix):
+    with open('prefixes.json', 'r') as f:
+        prefixes = json.load(f)
+
+    prefixes[str(ctx.guild.id)] = prefix
+
+    with open('prefixes.json', 'w') as f:
+        json.dump(prefixes, f, indent=4)
+
+    await ctx.send(f'Prefix changed to: {prefix}')
+
 @bot.event
 async def on_ready():
+    guilds = bot.guilds
+    with open('prefixes.json', 'r') as f:
+        curr = json.load(f)
+    for g in guilds:
+        if g.id in curr:
+            return
+        else:
+            curr[str(g.id)] = '<'
+    with open('prefixes.json', 'w') as f:
+        json.dump(curr, f, indent=4)
     print('Successfully booted Clutchbot')
     await bot.change_presence(activity=discord.Game(name='1+1=3!'))
     #await dq_ping()
@@ -124,9 +177,10 @@ async def ping(ctx):
         colour=discord.Colour.green()
     )
     embed.set_author(name='Vibe Bot')
-    embed.add_field(name='Survival', value='Ping = {0}'.format(smp.status().latency), inline=False)
-    embed.add_field(name='Modded', value='Ping = {0}'.format(modded.status().latency), inline=False)
-    embed.add_field(name='Hypixel', value='Ping = {0}'.format(hypixel.status().latency), inline=False)
+    embed.add_field(name='Survival', value='Ping = {0} ms'.format(smp.ping()), inline=False)
+    embed.add_field(name='Modded', value='Ping = {0} ms'.format(modded.ping()), inline=False)
+    embed.add_field(name='Hypixel', value='Ping = {0} ms'.format(hypixel.ping()), inline=False)
+    await ctx.send(embed=embed)
 
 """
 @bot.command()
