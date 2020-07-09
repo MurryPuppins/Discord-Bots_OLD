@@ -5,6 +5,8 @@ import random
 from mcstatus import MinecraftServer
 import json
 
+
+
 async def getPrefix(client, message):
     with open('prefixes.json', 'r') as f:
         prefixes = json.load(f)
@@ -14,6 +16,8 @@ async def getPrefix(client, message):
 bot = commands.Bot(command_prefix=getPrefix)
 "bot = commands.Bot(command_prefix='<', case_insensitive=True)"
 
+count = 0
+
 #client = discord.Client()
 bot.remove_command("help")
 rankname = 'Member'
@@ -22,6 +26,9 @@ modded = MinecraftServer("mod.clutchgaming.xyz", 25569)
 hypixel = MinecraftServer("mc.hypixel.net", 25565)
 
 
+def vibeInc():
+    global count
+    count += 1
 
 # When bot joins guild, assign default prefix
 @bot.event
@@ -160,6 +167,7 @@ async def iwannadateyou(ctx):
 @bot.command()
 async def vibe(ctx):
     await ctx.send(random.choice(lines))
+    await vibeInc()
 
 @bot.command()
 async def fetchbutter(ctx):
@@ -190,6 +198,7 @@ async def ping(ctx):
         await ctx.send('Pong!')
     else:
         await ctx.send('You need the ' + role.name + 'role!')"""
+
 
 lines = vibeload()
 print(lines)

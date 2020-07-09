@@ -3,7 +3,9 @@ import discord
 from discord.ext import commands
 import random
 from creds import token
+from creds import dbltoken
 import json
+import dbl
 
 async def getPrefix(client, message):
     with open('prefixes.json', 'r') as f:
@@ -15,6 +17,20 @@ bot = commands.Bot(command_prefix='<', case_insensitive=True)
 client = discord.Client()
 bot.remove_command('help')
 filepath = 'memes/'
+
+class TopGG(commands.Cog):
+    """Handles interactions with the top.gg API"""
+
+    def __init__(self, bot):
+        self.bot = bot
+        self.token = dbltoken # set this to your DBL token
+        self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True) # Autopost will post your guild count every 30 minutes
+
+    async def on_guild_post(self):
+        print("Server count posted successfully")
+
+def setup(bot):
+    bot.add_cog(TopGG(bot))
 
 @bot.event
 async def on_guild_join(guild):
@@ -63,6 +79,7 @@ async def on_ready():
         json.dump(curr, f, indent=4)
     print('Successfully booted Vibe Bot Official')
     await bot.change_presence(activity=discord.Game(name='Straight vibin!'))
+    await setup(bot)
 
 
 # Error handling, ctx = context, error = error
