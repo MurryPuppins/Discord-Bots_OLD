@@ -5,15 +5,27 @@ import random
 from mcstatus import MinecraftServer
 import json
 
+async def get_prefix(bot, message):
+    if not message.guild:
+        return commands.when_mentioned_or(">")(bot, message)
 
+    with open("prefixes.json", 'r') as f:
+        prefixes = json.load(f)
 
+    if str(message.guild.id) not in prefixes:
+        return commands.when_mentioned_or(">")(bot, message)
+
+    prefix = prefixes[str(message.guild.id)]
+    return commands.when_mentioned_or(prefix)(bot, message)
+
+"""
 async def getPrefix(client, message):
     with open('prefixes.json', 'r') as f:
         prefixes = json.load(f)
 
-    return prefixes[str(message.guild.id)]
+    return prefixes[str(message.guild.id)]"""
 
-bot = commands.Bot(command_prefix=getPrefix)
+bot = commands.Bot(command_prefix=get_prefix)
 "bot = commands.Bot(command_prefix='<', case_insensitive=True)"
 
 count = 0
@@ -202,4 +214,5 @@ async def ping(ctx):
 
 lines = vibeload()
 print(lines)
+bot.load_extension('cogs.prefix')
 bot.run('MzM1NjM3NjQ5MDMxMTY4MDAw.Xl3yMw.R2OTGdH49JDgMSTaKmmTs6vGW2w')
