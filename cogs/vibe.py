@@ -1,7 +1,7 @@
 from discord.ext import commands
 import discord
 import random
-from testbot import filepath
+from testingJunk.testbot import filepath
 
 # Vibe Suggestion helper function to insert into text
 async def suggestadd(sug):

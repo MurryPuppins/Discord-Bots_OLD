@@ -8,7 +8,7 @@ async def get_prefix(ctx, message):
     if not message.guild:
         return commands.when_mentioned_or("<")(bot, message)
 
-    with open("prefixes.json", 'r') as f:
+    with open("../vibeBotOfficial/prefixes.json", 'r') as f:
         prefixes = json.load(f)
 
     if str(message.guild.id) not in prefixes:

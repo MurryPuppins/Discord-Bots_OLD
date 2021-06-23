@@ -9,7 +9,7 @@ async def get_prefix(bot, message):
     if not message.guild:
         return commands.when_mentioned_or(">")(bot, message)
 
-    with open("prefixes.json", 'r') as f:
+    with open("../vibeBotOfficial/prefixes.json", 'r') as f:
         prefixes = json.load(f)
 
     if str(message.guild.id) not in prefixes:
@@ -45,32 +45,32 @@ def vibeInc():
 # When bot joins guild, assign default prefix
 @bot.event
 async def on_guild_join(guild):
-    with open('prefixes.json', 'r') as f:
+    with open('../vibeBotOfficial/prefixes.json', 'r') as f:
         prefixes = json.load(f)
 
     prefixes[str(guild.id)] = '>'
 
-    with open('prefixes.json', 'w') as f:
+    with open('../vibeBotOfficial/prefixes.json', 'w') as f:
         json.dump(prefixes, f, indent=4)
 
 @bot.event
 async def on_guild_remove(guild):
-    with open('prefixes.json', 'r') as f:
+    with open('../vibeBotOfficial/prefixes.json', 'r') as f:
         prefixes = json.load(f)
 
     prefixes.pop(str(guild.id))
 
-    with open('prefixes.json', 'w') as f:
+    with open('../vibeBotOfficial/prefixes.json', 'w') as f:
         json.dump(prefixes, f, indent=4)
 
 @bot.command()
 async def prefix(ctx, prefix):
-    with open('prefixes.json', 'r') as f:
+    with open('../vibeBotOfficial/prefixes.json', 'r') as f:
         prefixes = json.load(f)
 
     prefixes[str(ctx.guild.id)] = prefix
 
-    with open('prefixes.json', 'w') as f:
+    with open('../vibeBotOfficial/prefixes.json', 'w') as f:
         json.dump(prefixes, f, indent=4)
 
     await ctx.send(f'Prefix changed to: {prefix}')
@@ -78,14 +78,14 @@ async def prefix(ctx, prefix):
 @bot.event
 async def on_ready():
     guilds = bot.guilds
-    with open('prefixes.json', 'r') as f:
+    with open('../vibeBotOfficial/prefixes.json', 'r') as f:
         curr = json.load(f)
     for g in guilds:
         if g.id in curr:
             return
         else:
             curr[str(g.id)] = '<'
-    with open('prefixes.json', 'w') as f:
+    with open('../vibeBotOfficial/prefixes.json', 'w') as f:
         json.dump(curr, f, indent=4)
     print('Successfully booted Clutchbot')
     await bot.change_presence(activity=discord.Game(name='1+1=3!'))
