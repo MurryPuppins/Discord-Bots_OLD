@@ -1,6 +1,11 @@
 from discord.ext import commands
 import discord
 
+"""
+This is a test cog file, for testing cog functionality
+NOT in implementation, nor does it work: DO NOT USE
+"""
+
 class Commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

@@ -1,3 +1,4 @@
+# Self-explanatory imports, some not in use currently (testing purposes)
 import discord
 import traceback
 import os
@@ -7,6 +8,14 @@ import random
 from mcstatus import MinecraftServer
 import sqlite3
 
+"""
+---------- Clutch Bot -----------
+This is responsible for discord and remote server management for my own Discord server
+Lots of testing happens with this bot, hence the possibility of strange functionalities
+"""
+
+
+# Variables
 intents = discord.Intents.default()
 intents.members = True
 
@@ -24,15 +33,14 @@ con = sqlite3.connect('counter.db')
 cur = con.cursor()
 
 
+# Boot up sequence initialized upon each startup
 @bot.event
 async def on_ready():
-    #if db not in db.get_tables():
-    #    db.add_table('counter', column1='INT')
     print('Successfully booted ' + bot_name)
     await bot.change_presence(activity=discord.Game(name='1+1=3!'))
-    #await dq_ping()
 
 
+# Testing command for new feature relative to the Vibe bot
 @bot.command()
 async def options(ctx):
     embed = discord.Embed(
@@ -48,6 +56,7 @@ async def options(ctx):
     await ctx.send(embed=embed)
 
 
+# Error handling (prevents console spam from generic errors)
 @bot.event
 async def on_command_error(ctx, error):
     if hasattr(ctx.command, 'on_error'):
@@ -56,6 +65,8 @@ async def on_command_error(ctx, error):
         return
 
 
+# Remote server management, allows ClutchGaming admins to remotely restart the Minecraft modded server
+# Accounts for peaceful stops, possible crashes, and freezes
 @bot.command()
 @commands.has_role('Admin')
 async def restart_mod(ctx):
@@ -66,6 +77,7 @@ async def restart_mod(ctx):
     await ctx.send("Sent restart command to modded server!")
 
 
+# Server management command, allows players to assign roles for game-based notifications
 @bot.command()
 async def role(ctx, arg):
     author = ctx.message.author
@@ -84,28 +96,22 @@ async def role(ctx, arg):
     else:
         await ctx.send("Role request not recognized!")
 
-"""
-#@tasks.loop(hours=24)
-async def dq_ping():
-    channel = bot.get_channel(230087276967886850)
-    while(True):
-        print("Loop ran successfully")
-        await channel.send('<@400286398575280158>, your vibe has been checked! <:patrickpingthrow:643614030933786636>')
-        await asyncio.sleep(86400)
-"""
 
-
+# Automatically assigns "Member" role to newly-joining users, along with a personalized welcome message to
+# the specific channel
 @bot.event
 async def on_member_join(member):
     await bot.get_channel(347239762798837761).send("Welcome {0.mention} to ClutchGaming, we hope you enjoy your time here!".format(member))
     await member.add_roles(discord.utils.get(member.guild.roles, name="Member"))
 
 
+# Automatically sends message to welcome-leave channel informing of user departures
 @bot.event
 async def on_member_remove(member):
     await bot.get_channel(347239762798837761).send("Goodbye {0} {1}".format(member, bot.get_emoji(644734494502420490)))
 
 
+# Helpful command displaying useful links pertaining to ClutchGaming in an embedded message fashion
 @bot.command()
 async def links(ctx):
     embed = discord.Embed(
@@ -121,26 +127,9 @@ async def links(ctx):
     await ctx.send(embed=embed)
 
 
-# Help command for commands relating to Vibe Bot
-@bot.command()
-async def help(ctx):
-    embed = discord.Embed(
-        title='Help List',
-        description='All commands relevant to Vibe Bot!',
-        colour=discord.Colour.dark_magenta()
-    )
-    embed.set_author(name=bot_name)
-    embed.add_field(name='<vibe', value='Checks your vibe!', inline=False)
-    embed.add_field(name='<ping', value='Ping to test status of Vibe Bot!', inline=False)
-    embed.add_field(name='<fetchbutter', value='Fetches you some butter!', inline=False)
-    embed.add_field(name='<role <role>', value='Get a role to get notifications of our updates! Available roles: Minecraft, Rust and Bots', inline=False)
-    embed.add_field(name='<vibesug msg', value='Have a vibe suggestion? Run the command with your suggestion afterwards! E.g > <vibesug This bot is gucci gang', inline=False)
-    await ctx.send(embed=embed)
-
-
+# Debugging functionality, pings ClutchGaming's current servers and returns success + latency
 @bot.command()
 async def ping(ctx):
-    #await ctx.send("test")
     embed = discord.Embed(
         title='ClutchGaming',
         description='Health and Status of our Servers!',
@@ -153,6 +142,7 @@ async def ping(ctx):
     await ctx.send(embed=embed)
 
 
+# Miscellaneous entertainment command
 @bot.command()
 async def iwannadateyou(ctx):
     await ctx.send('Wanna date? Here is my number: (605)-475-6968')
@@ -171,9 +161,11 @@ async def database_commands(ctx):
     await ctx.send("No sir, yer neer to be murr")
 
 
+# Miscellaneous entertainment command, doubles as a ping/functionality status for the bot itself
 @bot.command()
 async def fetchbutter(ctx):
     await ctx.send(':butter:')
 
 
+# Secret for bot, *NEVER share this with ANYONE*
 bot.run('')

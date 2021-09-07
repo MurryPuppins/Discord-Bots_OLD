@@ -1,26 +1,23 @@
 import discord
 import traceback
-#import asyncio
 from discord.ext import commands
 import random
 from creds import token
 import json
-import dbl
 import sqlite3
-#from creds import dbltoken
-
 
 """
-async def getPrefix(client, msg):
-    if msg.guild is None:
-        return ">"
-    else:
-        with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-        return prefixes[str(msg.guild.id)]
+---------- Vibe Bot -----------
+This is my Vibe Bot, which is found in over 450 servers and has given thousands of vibe checks
+Support Discord Server: https://discord.com/invite/7VemvMg
+
+The majority of the implementation can be found on this Github; however, data may be omitted for security
+and privacy reasons. If you have any questions, comments, or suggestions, please ping me in my support discord
+above :)
 """
 
 
+# Responsible for loading current prefixes
 async def get_prefix(ctx, message):
     if not message.guild:
         return commands.when_mentioned_or("<")(bot, message)
@@ -34,6 +31,7 @@ async def get_prefix(ctx, message):
     prefix = prefixes[str(message.guild.id)]
     return commands.when_mentioned_or(prefix)(bot, message)
 
+# Variables
 bot = commands.Bot(command_prefix=get_prefix)
 client = discord.Client()
 bot.remove_command('help')
@@ -55,16 +53,6 @@ async def on_ready():
             traceback.print_exc
     print('Successfully booted Vibe Bot Official')
     await bot.change_presence(activity=discord.Game(name='Straight vibin!'))
-    #await update_owner_msg()
-
-
-async def update_owner_msg():
-    msg = "Hello! First off, I apologize for the inconvenience this may have caused (if you got a duplicate of this, sorry, I forgot about an exception)! You are receiving this message because you are the owner of a discord that contains the Vibe bot, hence why I'm here <3. I just wanted to invite you to join our support discord, so that you can be part of the next poll that will determine the next series of updates for the bot! I would like the community to be involved in the decisions that set the course of the future of this bot, so I invite you to join the discord to participate in the poll and see all updates/information pertinent to the bot! If you do not wish to join, that is fine! This will most likely be the only message you'll receive in this fashion. Have a vibeful day! The link can be found here: https://discord.gg/XWsRnMt"
-    for g in bot.guilds:
-        try:
-            await g.owner.send(msg)
-        except Exception:
-            pass
 
 
 # Error handling, ctx = context, error = error
@@ -104,13 +92,7 @@ def vibeload():
     return lines
 
 
-# Easter Egg command only found through vibe/guessing, not inside help command
-@bot.command()
-async def yousuck(ctx):
-    await ctx.send("||What the fuck did you just fucking say about me, you little bitch? I'll have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills. I am trained in gorilla warfare and I'm the top sniper in the entire US armed forces. You are nothing to me but just another target. I will wipe you the fuck out with precision the likes of which has never been seen before on this Earth, mark my fucking words. You think you can get away with saying that shit to me over the Internet? Think again, fucker. As we speak I am contacting my secret network of spies across the USA and your IP is being traced right now so you better prepare for the storm, maggot. The storm that wipes out the pathetic little thing you call your life. You're fucking dead, kid. I can be anywhere, anytime, and I can kill you in over seven hundred ways, and that's just with my bare hands. Not only am I extensively trained in unarmed combat, but I have access to the entire arsenal of the United States Marine Corps and I will use it to its full extent to wipe your miserable ass off the face of the continent, you little shit. If only you could have known what unholy retribution your little clever comment was about to bring down upon you, maybe you would have held your fucking tongue. But you couldn't, you didn't, and now you're paying the price, you goddamn idiot. I will shit fury all over you and you will drown in it. You're fucking dead, kiddo.||")
-
-
-# Help command for commands relating to Vibe Bot
+# Help command for commands relating to Vibe Bot, displayed in embedded message format
 @bot.command()
 async def help(ctx):
     embed = discord.Embed(
@@ -134,7 +116,8 @@ async def invite(ctx):
     await ctx.send('Eh, you likey my vibeys? You can invite me to your party at vibebot.clutchgaming.xyz :)')
 
 
-# Command to check vibe
+# Primary entertainment command, returns vibe for user
+# Increments vibecount upon each call for statistical purposes
 @bot.command()
 async def vibe(ctx):
     cur.execute("UPDATE vibecount SET count = count+1")
@@ -144,14 +127,13 @@ async def vibe(ctx):
         await ctx.send(file=discord.File(filepath + vabe[1:]))
     else:
         await ctx.send(vabe)
-    #await ctx.send(random.choice(lines))
 
 
+# Returns the number of vibe-checks the bot has issued (as of June 2021)
 @bot.command()
 async def vibecount(ctx):
-    if ctx.message.author.id == 169554013837066241:
-        cur.execute("SELECT count FROM vibecount")
-        await ctx.send(cur.fetchone()[0])
+    cur.execute("SELECT count FROM vibecount")
+    await ctx.send(cur.fetchone()[0])
 
 
 # Command to test functionality/status of bot
@@ -160,11 +142,12 @@ async def ping(ctx):
     await ctx.send('Pong!')
 
 
-# Fun command to fetch butter/return butter emoji
+# Miscellaneous entertainment command: returns butter emoji
 @bot.command()
 async def fetchbutter(ctx):
     await ctx.send(':butter:')
 
-# Loads the vibe check possibilities and runs the bot
+
+# Loads the vibe check possibilities and runs the bot, token not available publicly (as it never should be)
 lines = vibeload()
 bot.run(token)

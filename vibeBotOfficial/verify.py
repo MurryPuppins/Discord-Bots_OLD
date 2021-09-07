@@ -1,5 +1,7 @@
 import os
 
+# VERY handy script that will automatically add new files in the gifs/images to the vibelist
+# But does so in a fashion that it maintains the vibelist format
 directory = 'memes'
 
 with open('vibe.txt', 'r+') as f:

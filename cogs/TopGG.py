@@ -3,6 +3,9 @@ import discord
 from discord.ext import commands
 from creds import dbltoken
 
+
+# Cog class responsible for API interaction with the TopGG website (Where bot is posted and can be voted upon)
+# Requires your own API/token, hence the "dbltoken
 class TopGG(commands.Cog):
     """Handles interactions with the top.gg API"""
 

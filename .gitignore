@@ -1,4 +1,8 @@
 # Project exclude paths
 /venv/
 testingsimplelogic.py
-prefixes.json
+vibeBotOfficial/prefixes.json
+clutchGamingBot/oldcode.txt
+vibeBotOfficial/oldcode.txt
+cogs/testingVibeCog.py
+testingJunk/*
