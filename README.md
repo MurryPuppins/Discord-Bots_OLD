@@ -14,5 +14,5 @@ Guppy: Simple role-management bot developed for a friend of mine<br>
 ClutchGaming: My own discord and remote server management bot, found in my community server. The remote server management allows my administrative team to carry out remote actions on our servers <br>
 <br>
 <br>
-Small note: Discord.py is being continued as of April 2022, it is recommended to utilize a different API wrapper or Javascript. <br>
+Small note: Discord.py is being discontinued, thus these bots will be no longer functional as of April 2022. I plan on rewriting these bots in its native javascript language, along with new features for Vibebot <br>
 Smaller note: Those nosy enough, the bot tokens in this repository are defunct, no point in trying them ;)
