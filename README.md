@@ -2,7 +2,7 @@
 This repository is home to a few of my Discord bots that I've developed. They are written in Python utilizing [Rapptz's Discord.py](https://discordpy.readthedocs.io/), which is an API wrapper. There are 3 bots total, VibeBot, ClutchGaming, and Guppy, details may be found below.
 
 ## <p align="center"> Links/API </p>
-> VibeBot Discord Invite: http://vibebot.clutchgaming.xyz/ <br>
+> VibeBot Discord Invite: https://vibebot.murpups.dev/ <br>
 > Discord.py API Wrapper: https://discordpy.readthedocs.io/
 <br>
 
